@@ -1,5 +1,6 @@
 package Models;
 
+import Exceptions.DataBaseNotInitializedException;
 import Factory.HospitalObjectFactory;
 import Service.PatientService;
 import Service.PatientServiceImpl;
@@ -16,7 +17,8 @@ public class Hospital {
     private PatientDatabase patientDatabase;
     private RoomDatabase roomDatabase;
     private DoctorDatabase doctorDatabase;
-    private PatientService patientService = new PatientServiceImpl();
+
+
     //private HospitalObjectFactory hospitalObjectFactory;
 
 
@@ -94,7 +96,12 @@ public class Hospital {
 
     public void getPatientById(String pId){
 
-        System.out.println(patientService.getPatientById(pId));
+        try{
+            PatientService ps=new PatientServiceImpl();
+        }
+        catch(DataBaseNotInitializedException e){
+            System.out.println("Database not found exception handled in hospital class");
+        }
     }
 
 }
