@@ -34,7 +34,7 @@ public class DoctorDatabase {
         return doctorDataBase.get(id);
     }
 
-    public void addDoctorToDataBase(Doctor doctor){
+    public void   addDoctorToDataBase(Doctor doctor){
         String docId=doctor.getDocId();
         doctorDataBase.put(docId,doctor);
     }
