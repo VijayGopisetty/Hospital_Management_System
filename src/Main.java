@@ -10,5 +10,6 @@ public class Main {
         h.appointDoctor("MBBS","Vijay",1234,"Heart Surgeon",70000,"12:30-4:30");
         h.createRoom();
         h.admitPatient("abs",25,12345,"@gmail","M","No");
+        h.getPatientById("PID1jhvfdsfgb");//Applied exeception
     }
 }

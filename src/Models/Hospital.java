@@ -1,5 +1,8 @@
 package Models;
 
+import Factory.HospitalObjectFactory;
+import Service.PatientService;
+import Service.PatientServiceImpl;
 import database.DoctorDatabase;
 import database.PatientDatabase;
 import database.RoomDatabase;
@@ -13,15 +16,16 @@ public class Hospital {
     private PatientDatabase patientDatabase;
     private RoomDatabase roomDatabase;
     private DoctorDatabase doctorDatabase;
+    private PatientService patientService = new PatientServiceImpl();
+    //private HospitalObjectFactory hospitalObjectFactory;
+
 
     public Hospital(String name, String address, long phone_number, String email) {
         this.name = name;
         this.address = address;
         this.phone_number = phone_number;
         this.email = email;
-        this.patientDatabase=new PatientDatabase();
-        this.roomDatabase=new RoomDatabase();
-        this.doctorDatabase=new DoctorDatabase();
+        //this.hospitalObjectFactory=new HospitalObjectFactory();
     }
 
     public String getName() {
@@ -58,14 +62,14 @@ public class Hospital {
 
     public void admitPatient(String name, int age,long phoneNumber,String email,String gender, String disease){
         //1. Generate id for patient
-        int totalPatientCount= patientDatabase.TotalPatientCount();
+        int totalPatientCount= HospitalObjectFactory.getPatientDatabase().TotalPatientCount();
         String pId="PID"+totalPatientCount+1;
 
         //2. Get doctor who is handling minimum no of patients
-        Doctor doctor=doctorDatabase.getMinimumPatientDoctor();
+        Doctor doctor=HospitalObjectFactory.getDoctorDatabase().getMinimumPatientDoctor();
 
         //3. Get empty room
-        Room room=roomDatabase.getUnOccupiedRoom();
+        Room room=HospitalObjectFactory.getRoomDatabase().getUnOccupiedRoom();
         room.setOccupied(true);
 
         Patient p=new Patient(pId, name, age, phoneNumber, email, gender, disease, doctor, room, true);
@@ -76,16 +80,21 @@ public class Hospital {
     }
 
     public void appointDoctor(String docDegree, String name,long phoneNumber,String speciality, int salary, String timeSlot ){
-        String docId ="DOCID"+doctorDatabase.getTotalDoctors()+1;
+        String docId ="DOCID"+(HospitalObjectFactory.getDoctorDatabase().getTotalDoctors()+1);
         Doctor doc=new Doctor(docId,docDegree,name,phoneNumber, speciality,salary,timeSlot);
-        doctorDatabase.addDoctorToDataBase(doc);
+        HospitalObjectFactory.getDoctorDatabase().addDoctorToDataBase(doc);
         System.out.println("Doctor appointed successfully ->"+doc);
     }
     public void createRoom(){
-        String roomId="RoomId "+roomDatabase.getTotalRooms()+1;
+        String roomId="RoomId "+(HospitalObjectFactory.getRoomDatabase().getTotalRooms()+1);
         Room room=new Room(roomId,false,null,null);
-        roomDatabase.addRoomToDB(room);
+        HospitalObjectFactory.getRoomDatabase().addRoomToDB(room);
         System.out.println("Room added successfully ->"+room);
+    }
+
+    public void getPatientById(String pId){
+
+        System.out.println(patientService.getPatientById(pId));
     }
 
 }
